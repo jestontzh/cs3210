@@ -1,1 +1,3 @@
-*.exe
+blur_seq
+blur_threads
+blur_omp
