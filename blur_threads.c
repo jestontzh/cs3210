@@ -5,6 +5,7 @@
 
 #define NUM_THREADS 3
 
+// Structure to pass gaussian blur parameters into pthread_create()
 struct blur_params {
     unsigned char * src;
     float * dst;
@@ -151,12 +152,13 @@ float convolve(const float *kernel, const float *buffer, const int ksize) {
     return sum;
 }
 
-
+// Function is now a pointer to be passed as a parameter into pthread_create()
 void *gaussian_blur(void *blur_args)
 {
     struct blur_params *blur_data;
     blur_data = (struct blur_params *) blur_args;
 
+    // initializing variables from values in struct blur_params
     unsigned char *src = blur_data->src;
     float *dst = blur_data->dst;
     int width = blur_data->width;
@@ -303,6 +305,7 @@ int main(int argc, char ** argv)
     dstR = (float*)malloc (width*height* sizeof(float));
     dstG = (float*)malloc (width*height* sizeof(float));
 
+    // populating blur_params struct with its corresponding data
     blur_params_array[0].src = dataB;
     blur_params_array[1].src = dataR;
     blur_params_array[2].src = dataG;
@@ -322,12 +325,11 @@ int main(int argc, char ** argv)
     pthread_t threads[NUM_THREADS];
     int ret;
     long i;
+    
+    // thread creation starts here
     for (i = 0; i < NUM_THREADS; i++) {
         ret = pthread_create(&threads[i], NULL, gaussian_blur, (void *) &blur_params_array[i]);
     }
-    // gaussian_blur (dataB, dstB, width, height, sigma, blur_size);
-    // gaussian_blur (dataR, dstR, width, height, sigma, blur_size);
-    // gaussian_blur (dataG, dstG, width, height, sigma, blur_size);
     
     ret_code = write_BMP (out_filename, dstB, dstG, dstR, info, offset, width, row_padded, height);
 

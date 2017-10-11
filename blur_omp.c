@@ -284,18 +284,16 @@ int main(int argc, char ** argv)
     dstR = (float*)malloc (width*height* sizeof(float));
     dstG = (float*)malloc (width*height* sizeof(float));
 
+    // representing dataB, R, G and dstB, R, G as arrays to be used in a loop
     unsigned char *data[NUM_THREADS] = {dataB, dataR, dataG};
     float *dst[NUM_THREADS] = {dstB, dstR, dstG};
     int i;
 
+    // openMP starts here
     #pragma omp parallel for
     for (i = 0; i < NUM_THREADS; i++) {
         gaussian_blur (data[i], dst[i], width, height, sigma, blur_size);
     }
-
-    // gaussian_blur (dataB, dstB, width, height, sigma, blur_size);
-    // gaussian_blur (dataR, dstR, width, height, sigma, blur_size);
-    // gaussian_blur (dataG, dstG, width, height, sigma, blur_size);
     
     ret_code = write_BMP (out_filename, dstB, dstG, dstR, info, offset, width, row_padded, height);
 
