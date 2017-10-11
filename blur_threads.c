@@ -311,21 +311,13 @@ int main(int argc, char ** argv)
     blur_params_array[1].dst = dstR;
     blur_params_array[2].dst = dstG;
 
-    blur_params_array[0].width = width;
-    blur_params_array[1].width = width;
-    blur_params_array[2].width = width;
-
-    blur_params_array[0].height = height;
-    blur_params_array[1].height = height;
-    blur_params_array[2].height = height;
-
-    blur_params_array[0].sigma = sigma;
-    blur_params_array[1].sigma = sigma;
-    blur_params_array[2].sigma = sigma;
-
-    blur_params_array[0].blur_size = blur_size;
-    blur_params_array[1].blur_size = blur_size;
-    blur_params_array[2].blur_size = blur_size;
+    int j;
+    for (j = 0; j < NUM_THREADS; j++) {
+        blur_params_array[j].width = width;
+        blur_params_array[j].height = height;
+        blur_params_array[j].sigma = sigma;
+        blur_params_array[j].blur_size = blur_size;
+    }
 
     pthread_t threads[NUM_THREADS];
     int ret;
