@@ -1,3 +1,6 @@
 blur_seq
 blur_threads
 blur_omp
+
+*.exe
+*.bmp
