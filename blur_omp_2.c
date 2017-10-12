@@ -187,6 +187,7 @@ void gaussian_blur(unsigned char *src, float *dst, int width, int height, float 
 
 
     // blur each row
+    #pragma omp parallel for
     for (y = 0; y < height; y++)
     {
         for (x1 = 0; x1 < halfksize  ; x1++)
@@ -217,6 +218,7 @@ void gaussian_blur(unsigned char *src, float *dst, int width, int height, float 
     }
     
     // blur each column
+    #pragma omp parallel for
     for (x = 0; x < width; x++)
     {
         for (y1 = 0; y1 < halfksize  ; y1++) 
